@@ -1,0 +1,236 @@
+version: 1
+
+scenarios:
+  - id: "KANBAN-001"
+    name: "칸반 보드 초기 표시"
+    given: "앱을 처음 열고 저장된 데이터가 없는 상태"
+    when: "앱이 로드된다"
+    then: "'To Do', 'In Progress', 'Done' 3개 칼럼이 표시되고 각 칼럼에 카드가 없다"
+    examples:
+      - input: {}
+        expect:
+          columns: ["To Do", "In Progress", "Done"]
+          totalCards: 0
+
+  - id: "KANBAN-002"
+    name: "카드 추가"
+    given: "'To Do' 칼럼이 표시된 칸반 보드"
+    when: "'To Do' 칼럼에서 제목을 입력하고 추가 버튼을 클릭한다"
+    then: "해당 칼럼에 새 카드가 표시된다"
+    examples:
+      - input: { title: "우유 사기", column: "To Do" }
+        expect:
+          cardText: "우유 사기"
+          columnCardCount: 1
+      - input: { title: "", column: "To Do" }
+        expect:
+          columnCardCount: 0
+
+  - id: "KANBAN-003"
+    name: "카드 편집 화면 필드 표시"
+    given: "'To Do' 칼럼에 '우유 사기' 카드가 있는 칸반 보드"
+    when: "'우유 사기' 카드를 클릭한다"
+    then: "편집 화면에 제목, 설명, 우선순위, 태그, 마감일 필드가 표시된다"
+    examples:
+      - input: { cardTitle: "우유 사기" }
+        expect:
+          titleFieldVisible: true
+          descriptionFieldVisible: true
+          priorityFieldVisible: true
+          tagFieldVisible: true
+          dueDateFieldVisible: true
+
+  - id: "KANBAN-004"
+    name: "카드 인라인 편집"
+    given: "'우유 사기' 카드의 편집 화면이 열린 상태"
+    when: "필드를 수정하고 저장한다"
+    then: "수정된 내용이 카드에 반영된다"
+    examples:
+      - input: { cardTitle: "우유 사기", newTitle: "두유 사기" }
+        expect:
+          cardText: "두유 사기"
+      - input: { cardTitle: "우유 사기", newPriority: "High" }
+        expect:
+          priority: "High"
+
+  - id: "KANBAN-005"
+    name: "카드 편집 취소"
+    given: "'우유 사기' 카드의 편집 화면이 열린 상태"
+    when: "제목을 '두유 사기'로 변경하고 저장하지 않고 편집 화면을 닫는다"
+    then: "카드 제목이 '우유 사기'로 유지된다"
+    examples:
+      - input: { originalTitle: "우유 사기", changedTitle: "두유 사기", save: false }
+        expect:
+          cardText: "우유 사기"
+
+  - id: "KANBAN-006"
+    name: "카드 삭제"
+    given: "'To Do' 칼럼에 '우유 사기' 카드가 있는 칸반 보드"
+    when: "'우유 사기' 카드를 삭제한다"
+    then: "'To Do' 칼럼에서 '우유 사기' 카드가 사라진다"
+    examples:
+      - input: { cardTitle: "우유 사기" }
+        expect:
+          cardVisible: false
+          columnCardCount: 0
+
+  - id: "KANBAN-007"
+    name: "카드 드래그&드롭 이동 (To Do → In Progress)"
+    given: "'To Do' 칼럼에 '우유 사기' 카드가 있는 칸반 보드"
+    when: "'우유 사기' 카드를 'In Progress' 칼럼으로 드래그한다"
+    then: "'To Do'에서 사라지고 'In Progress'에 표시된다"
+    examples:
+      - input: { cardTitle: "우유 사기", fromColumn: "To Do", toColumn: "In Progress" }
+        expect:
+          toDoCardCount: 0
+          inProgressCardCount: 1
+          movedCardText: "우유 사기"
+
+  - id: "KANBAN-008"
+    name: "카드 드래그&드롭 이동 (In Progress → Done)"
+    given: "'In Progress' 칼럼에 '우유 사기' 카드가 있는 칸반 보드"
+    when: "'우유 사기' 카드를 'Done' 칼럼으로 드래그한다"
+    then: "'In Progress'에서 사라지고 'Done'에 표시된다"
+    examples:
+      - input: { cardTitle: "우유 사기", fromColumn: "In Progress", toColumn: "Done" }
+        expect:
+          inProgressCardCount: 0
+          doneCardCount: 1
+          movedCardText: "우유 사기"
+
+  - id: "KANBAN-009"
+    name: "서브태스크 추가 및 완료 토글"
+    given: "'우유 사기' 카드의 편집 화면이 열린 상태"
+    when: "서브태스크를 추가하고 완료 체크한다"
+    then: "체크리스트에 항목이 표시되고 진행률이 업데이트된다"
+    examples:
+      - input: { subtaskTitle: "계란도 사기" }
+        expect:
+          subtaskText: "계란도 사기"
+          subtaskChecked: false
+      - input: { subtaskTitle: "계란도 사기", toggleComplete: true, totalSubtasks: 2, completedSubtasks: 1 }
+        expect:
+          subtaskChecked: true
+          progressText: "1/2"
+
+  - id: "KANBAN-010"
+    name: "서브태스크 삭제"
+    given: "'우유 사기' 카드 편집 화면에서 서브태스크 '계란도 사기'와 '빵 사기' 2개가 있는 상태"
+    when: "'계란도 사기' 서브태스크의 삭제 버튼을 클릭한다"
+    then: "체크리스트에서 '계란도 사기' 항목이 제거되고 진행률이 업데이트된다"
+    examples:
+      - input: { subtaskTitle: "계란도 사기", totalBefore: 2 }
+        expect:
+          subtaskVisible: false
+          remainingCount: 1
+
+  - id: "KANBAN-011"
+    name: "제목 검색"
+    given: "'우유 사기', '회의록 작성' 카드가 있는 칸반 보드"
+    when: "검색창에 '우유'를 입력한다"
+    then: "'우유 사기' 카드만 표시되고 '회의록 작성'은 숨겨진다"
+    examples:
+      - input: { searchText: "우유" }
+        expect:
+          visibleCards: ["우유 사기"]
+      - input: { searchText: "" }
+        expect:
+          visibleCards: ["우유 사기", "회의록 작성"]
+
+  - id: "KANBAN-012"
+    name: "우선순위 필터"
+    given: "우선순위 'High' 카드 1개, 'Low' 카드 1개가 있는 칸반 보드"
+    when: "필터에서 우선순위 'High'를 선택한다"
+    then: "'High' 우선순위 카드만 표시된다"
+    examples:
+      - input: { priorityFilter: "High" }
+        expect:
+          visibleCardCount: 1
+          visibleCardPriority: "High"
+
+  - id: "KANBAN-013"
+    name: "태그 필터"
+    given: "태그 '업무'가 있는 카드 1개, 태그 '개인'이 있는 카드 1개가 있는 칸반 보드"
+    when: "필터에서 태그 '업무'를 선택한다"
+    then: "'업무' 태그가 있는 카드만 표시된다"
+    examples:
+      - input: { tagFilter: "업무" }
+        expect:
+          visibleCardCount: 1
+          visibleCardTag: "업무"
+
+  - id: "KANBAN-014"
+    name: "필터 해제"
+    given: "우선순위 'High' 필터가 적용되어 'High' 카드만 표시된 칸반 보드"
+    when: "필터를 해제한다"
+    then: "모든 카드가 다시 표시된다"
+    examples:
+      - input: { activeFilter: "High", clearFilter: true }
+        expect:
+          visibleCardCount: 2
+
+  - id: "KANBAN-015"
+    name: "다크모드 토글"
+    given: "라이트 모드가 적용된 앱"
+    when: "다크모드 토글 버튼을 클릭한다"
+    then: "앱 전체가 다크 모드로 전환된다"
+    examples:
+      - input: { currentMode: "light" }
+        expect:
+          mode: "dark"
+      - input: { currentMode: "dark" }
+        expect:
+          mode: "light"
+
+  - id: "KANBAN-016"
+    name: "데이터 localStorage 저장 (추가 후 복원)"
+    given: "'To Do' 칼럼에 '우유 사기' 카드를 추가한 상태"
+    when: "페이지를 새로고침한다"
+    then: "'To Do' 칼럼에 '우유 사기' 카드가 그대로 표시된다"
+    examples:
+      - input: { cardTitle: "우유 사기", column: "To Do" }
+        expect:
+          cardText: "우유 사기"
+          cardColumn: "To Do"
+
+  - id: "KANBAN-017"
+    name: "데이터 localStorage 저장 (이동 후 복원)"
+    given: "'우유 사기' 카드를 'Done' 칼럼으로 이동한 상태"
+    when: "페이지를 새로고침한다"
+    then: "'Done' 칼럼에 '우유 사기' 카드가 표시된다"
+    examples:
+      - input: { cardTitle: "우유 사기", movedToColumn: "Done" }
+        expect:
+          cardText: "우유 사기"
+          cardColumn: "Done"
+
+  - id: "KANBAN-018"
+    name: "JSON 내보내기"
+    given: "카드 2개가 있는 칸반 보드"
+    when: "내보내기 버튼을 클릭한다"
+    then: "보드 데이터가 포함된 JSON 파일이 다운로드된다"
+    examples:
+      - input: { cardCount: 2 }
+        expect:
+          downloadTriggered: true
+
+  - id: "KANBAN-019"
+    name: "유효한 JSON 가져오기"
+    given: "기존 카드가 있는 칸반 보드"
+    when: "유효한 JSON 파일을 가져오기한다"
+    then: "기존 데이터가 교체되고 가져온 데이터가 표시된다"
+    examples:
+      - input: { importCards: ["새 카드 1", "새 카드 2"] }
+        expect:
+          visibleCards: ["새 카드 1", "새 카드 2"]
+
+  - id: "KANBAN-020"
+    name: "잘못된 JSON 가져오기"
+    given: "기존 카드가 있는 칸반 보드"
+    when: "잘못된 형식의 JSON 파일을 가져오기한다"
+    then: "오류 메시지가 표시되고 기존 데이터가 유지된다"
+    examples:
+      - input: { importData: "invalid json" }
+        expect:
+          errorVisible: true
+          existingDataPreserved: true
