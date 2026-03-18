@@ -79,6 +79,13 @@
 <nav class="flex items-center gap-4 px-6 py-2">
   <span class="text-xs" style="color:var(--w-muted)">wireframe</span>
   <button id="nav-0" onclick="show(0)" class="px-2 py-1">기본 화면</button>
+  <button id="nav-1" onclick="show(1)" class="px-2 py-1">빈 보드</button>
+  <button id="nav-2" onclick="show(2)" class="px-2 py-1">카드 추가</button>
+  <button id="nav-3" onclick="show(3)" class="px-2 py-1">카드 편집</button>
+  <button id="nav-4" onclick="show(4)" class="px-2 py-1">드래그&드롭</button>
+  <button id="nav-5" onclick="show(5)" class="px-2 py-1">검색·필터</button>
+  <button id="nav-6" onclick="show(6)" class="px-2 py-1">다크모드</button>
+  <button id="nav-7" onclick="show(7)" class="px-2 py-1">JSON 관리</button>
   <div class="vp-toggle flex ml-auto">
     <button id="vp-desktop" onclick="setViewport('desktop')" class="active">Desktop</button>
     <button id="vp-mobile" onclick="setViewport('mobile')">Mobile</button>
@@ -277,6 +284,772 @@
           <li>칼럼: 헤더(이름 + 카드 수), 카드 목록, 하단 Add card 버튼</li>
           <li>카드: 제목, 우선순위 뱃지, 태그, 서브태스크 진행률(있을 때), 마감일</li>
           <li>반응형: 3칼럼 그리드 → 단일 칼럼 스택 (@md 기준)</li>
+        </ul>
+      </details>
+    </div>
+
+  </div>
+</div>
+
+<!-- Screen 1: 빈 보드 — KANBAN-001 -->
+<div id="screen-1" class="screen">
+  <div class="screen-content @container max-w-6xl mx-auto p-6">
+
+    <h2 class="text-lg font-bold mb-5" style="color:var(--w-muted); border-bottom:1px solid var(--w-border); padding-bottom:8px;">
+      빈 보드
+    </h2>
+
+    <!-- Header (same as base) -->
+    <div class="flex items-center justify-between mb-4">
+      <h1 class="text-base font-bold">Kanban Board</h1>
+      <div class="flex items-center gap-2">
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="sun" style="width:14px;height:14px;color:var(--w-muted);"></i>
+          <div class="border rounded-full" style="width:32px;height:16px;background:var(--w-fill);border-color:var(--w-border);position:relative;">
+            <div style="width:12px;height:12px;border-radius:50%;background:white;border:1px solid var(--w-border);position:absolute;top:1px;left:2px;"></div>
+          </div>
+          <i data-lucide="moon" style="width:14px;height:14px;color:var(--w-muted);"></i>
+        </div>
+        <div style="border-left:1px solid var(--w-border); height:24px;"></div>
+        <button class="border rounded px-3 py-1 text-sm" style="border-color:var(--w-border); background:var(--w-fill)" disabled>
+          <span class="flex items-center gap-1"><i data-lucide="download" style="width:14px;height:14px;"></i> Export</span>
+        </button>
+        <button class="border rounded px-3 py-1 text-sm" style="border-color:var(--w-border); background:var(--w-fill)" disabled>
+          <span class="flex items-center gap-1"><i data-lucide="upload" style="width:14px;height:14px;"></i> Import</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Search & Filter bar -->
+    <div class="flex flex-col @md:flex-row gap-2 mb-4">
+      <div class="flex items-center border rounded px-3 py-1.5 gap-2 flex-1" style="border-color:var(--w-border); background:var(--w-fill);">
+        <i data-lucide="search" style="width:16px;height:16px;flex-shrink:0;"></i>
+        <input class="w-full text-sm border-0 outline-none" style="background:transparent; color:var(--w-muted)" placeholder="Search cards..." disabled>
+      </div>
+      <div class="flex gap-2">
+        <div class="border rounded px-3 py-1.5 text-sm flex items-center justify-between gap-2" style="border-color:var(--w-border); background:var(--w-fill); min-width:120px;">
+          <span style="color:var(--w-muted)">Priority</span>
+          <span style="color:var(--w-muted)">&#x25BE;</span>
+        </div>
+        <div class="border rounded px-3 py-1.5 text-sm flex items-center justify-between gap-2" style="border-color:var(--w-border); background:var(--w-fill); min-width:120px;">
+          <span style="color:var(--w-muted)">Tags</span>
+          <span style="color:var(--w-muted)">&#x25BE;</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty Kanban Columns -->
+    <div class="grid grid-cols-1 @md:grid-cols-3 gap-4">
+      <!-- To Do -->
+      <div class="border rounded-lg overflow-hidden" style="border-color:var(--w-border); background:white;">
+        <div class="px-4 py-3 flex items-center justify-between" style="border-bottom:1px solid var(--w-border); background:var(--w-fill);">
+          <span class="text-sm font-bold">To Do</span>
+          <span class="text-xs" style="color:var(--w-muted)">0</span>
+        </div>
+        <div class="p-3">
+          <div class="border-2 border-dashed rounded flex flex-col items-center justify-center p-8 gap-2" style="border-color:var(--w-border); color:var(--w-muted)">
+            <i data-lucide="clipboard-list" style="width:32px;height:32px;"></i>
+            <p class="text-sm">No cards yet</p>
+            <button class="border rounded px-3 py-1 text-xs mt-1" style="border-color:var(--w-border); background:var(--w-fill)" disabled>Add first card</button>
+          </div>
+        </div>
+      </div>
+      <!-- In Progress -->
+      <div class="border rounded-lg overflow-hidden" style="border-color:var(--w-border); background:white;">
+        <div class="px-4 py-3 flex items-center justify-between" style="border-bottom:1px solid var(--w-border); background:var(--w-fill);">
+          <span class="text-sm font-bold">In Progress</span>
+          <span class="text-xs" style="color:var(--w-muted)">0</span>
+        </div>
+        <div class="p-3">
+          <div class="border-2 border-dashed rounded flex flex-col items-center justify-center p-8 gap-2" style="border-color:var(--w-border); color:var(--w-muted)">
+            <i data-lucide="clipboard-list" style="width:32px;height:32px;"></i>
+            <p class="text-sm">No cards yet</p>
+          </div>
+        </div>
+      </div>
+      <!-- Done -->
+      <div class="border rounded-lg overflow-hidden" style="border-color:var(--w-border); background:white;">
+        <div class="px-4 py-3 flex items-center justify-between" style="border-bottom:1px solid var(--w-border); background:var(--w-fill);">
+          <span class="text-sm font-bold">Done</span>
+          <span class="text-xs" style="color:var(--w-muted)">0</span>
+        </div>
+        <div class="p-3">
+          <div class="border-2 border-dashed rounded flex flex-col items-center justify-center p-8 gap-2" style="border-color:var(--w-border); color:var(--w-muted)">
+            <i data-lucide="clipboard-list" style="width:32px;height:32px;"></i>
+            <p class="text-sm">No cards yet</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen-notes mt-6">
+      <details open>
+        <summary>Notes</summary>
+        <p>KANBAN-001: 앱 최초 로드 시 저장된 데이터가 없는 상태.</p>
+        <ul>
+          <li>3개 칼럼(To Do, In Progress, Done) 헤더가 모두 표시되고, 각 칼럼 카드 수는 0</li>
+          <li>각 칼럼에 Empty State가 표시됨 (아이콘 + "No cards yet")</li>
+          <li>"To Do" 칼럼의 Empty State에만 "Add first card" 버튼이 있어 첫 카드 추가를 유도</li>
+        </ul>
+      </details>
+    </div>
+
+  </div>
+</div>
+
+<!-- Screen 2: 카드 추가 — KANBAN-002 -->
+<div id="screen-2" class="screen">
+  <div class="screen-content @container max-w-6xl mx-auto p-6">
+
+    <h2 class="text-lg font-bold mb-5" style="color:var(--w-muted); border-bottom:1px solid var(--w-border); padding-bottom:8px;">
+      카드 추가
+    </h2>
+
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-4">
+      <h1 class="text-base font-bold">Kanban Board</h1>
+      <div class="flex items-center gap-2">
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="sun" style="width:14px;height:14px;color:var(--w-muted);"></i>
+          <div class="border rounded-full" style="width:32px;height:16px;background:var(--w-fill);border-color:var(--w-border);position:relative;">
+            <div style="width:12px;height:12px;border-radius:50%;background:white;border:1px solid var(--w-border);position:absolute;top:1px;left:2px;"></div>
+          </div>
+          <i data-lucide="moon" style="width:14px;height:14px;color:var(--w-muted);"></i>
+        </div>
+        <div style="border-left:1px solid var(--w-border); height:24px;"></div>
+        <button class="border rounded px-3 py-1 text-sm" style="border-color:var(--w-border); background:var(--w-fill)" disabled>
+          <span class="flex items-center gap-1"><i data-lucide="download" style="width:14px;height:14px;"></i> Export</span>
+        </button>
+        <button class="border rounded px-3 py-1 text-sm" style="border-color:var(--w-border); background:var(--w-fill)" disabled>
+          <span class="flex items-center gap-1"><i data-lucide="upload" style="width:14px;height:14px;"></i> Import</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Search & Filter bar -->
+    <div class="flex flex-col @md:flex-row gap-2 mb-4">
+      <div class="flex items-center border rounded px-3 py-1.5 gap-2 flex-1" style="border-color:var(--w-border); background:var(--w-fill);">
+        <i data-lucide="search" style="width:16px;height:16px;flex-shrink:0;"></i>
+        <input class="w-full text-sm border-0 outline-none" style="background:transparent; color:var(--w-muted)" placeholder="Search cards..." disabled>
+      </div>
+      <div class="flex gap-2">
+        <div class="border rounded px-3 py-1.5 text-sm flex items-center justify-between gap-2" style="border-color:var(--w-border); background:var(--w-fill); min-width:120px;">
+          <span style="color:var(--w-muted)">Priority</span>
+          <span style="color:var(--w-muted)">&#x25BE;</span>
+        </div>
+        <div class="border rounded px-3 py-1.5 text-sm flex items-center justify-between gap-2" style="border-color:var(--w-border); background:var(--w-fill); min-width:120px;">
+          <span style="color:var(--w-muted)">Tags</span>
+          <span style="color:var(--w-muted)">&#x25BE;</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kanban Columns — To Do has add card form open -->
+    <div class="grid grid-cols-1 @md:grid-cols-3 gap-4">
+      <!-- To Do Column with add form -->
+      <div class="border rounded-lg overflow-hidden" style="border-color:var(--w-border); background:white;">
+        <div class="px-4 py-3 flex items-center justify-between" style="border-bottom:1px solid var(--w-border); background:var(--w-fill);">
+          <span class="text-sm font-bold">To Do</span>
+          <span class="text-xs" style="color:var(--w-muted)">1</span>
+        </div>
+        <div class="p-3 flex flex-col gap-2">
+          <!-- Existing card -->
+          <div class="border rounded-lg p-3" style="border-color:var(--w-border); background:white;">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-sm font-bold">회의록 작성</span>
+              <span class="border rounded-full px-2 text-xs" style="border-color:var(--w-border); background:var(--w-fill)">Medium</span>
+            </div>
+          </div>
+          <!-- Add card form (expanded) -->
+          <div class="border-2 rounded-lg p-3 flex flex-col gap-2" style="border-color:var(--w-text); background:white;">
+            <input class="w-full border rounded px-3 py-1.5 text-sm" style="border-color:var(--w-border); background:var(--w-fill)" value="우유 사기" disabled>
+            <div class="flex justify-end gap-2">
+              <button class="border rounded px-3 py-1 text-sm" style="border-color:var(--w-border); background:var(--w-fill)" disabled>Cancel</button>
+              <button class="border rounded px-3 py-1 text-sm font-bold" style="border-color:var(--w-text); background:var(--w-fill)" disabled>Add</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- In Progress -->
+      <div class="border rounded-lg overflow-hidden" style="border-color:var(--w-border); background:white;">
+        <div class="px-4 py-3 flex items-center justify-between" style="border-bottom:1px solid var(--w-border); background:var(--w-fill);">
+          <span class="text-sm font-bold">In Progress</span>
+          <span class="text-xs" style="color:var(--w-muted)">0</span>
+        </div>
+        <div class="p-3">
+          <button class="w-full border border-dashed rounded-lg p-2 text-sm flex items-center justify-center gap-1" style="border-color:var(--w-border); color:var(--w-muted);" disabled>
+            <i data-lucide="plus" style="width:14px;height:14px;"></i> Add card
+          </button>
+        </div>
+      </div>
+
+      <!-- Done -->
+      <div class="border rounded-lg overflow-hidden" style="border-color:var(--w-border); background:white;">
+        <div class="px-4 py-3 flex items-center justify-between" style="border-bottom:1px solid var(--w-border); background:var(--w-fill);">
+          <span class="text-sm font-bold">Done</span>
+          <span class="text-xs" style="color:var(--w-muted)">0</span>
+        </div>
+        <div class="p-3">
+          <button class="w-full border border-dashed rounded-lg p-2 text-sm flex items-center justify-center gap-1" style="border-color:var(--w-border); color:var(--w-muted);" disabled>
+            <i data-lucide="plus" style="width:14px;height:14px;"></i> Add card
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen-notes mt-6">
+      <details open>
+        <summary>Notes</summary>
+        <p>KANBAN-002: "Add card" 버튼 클릭 시 칼럼 하단에 인라인 추가 폼이 열린다.</p>
+        <ul>
+          <li>제목 입력 필드 + Cancel/Add 버튼 구성</li>
+          <li>제목 "우유 사기" 입력 후 Add 클릭 → 해당 칼럼에 카드 생성</li>
+          <li>제목 없이 Add 클릭 → 카드가 생성되지 않음</li>
+          <li>Cancel 클릭 → 폼이 닫히고 "Add card" 버튼으로 복귀</li>
+        </ul>
+      </details>
+    </div>
+
+  </div>
+</div>
+
+<!-- Screen 3: 카드 편집 모달 — KANBAN-003, 004, 005, 006, 009, 010 -->
+<div id="screen-3" class="screen">
+  <div class="screen-content @container max-w-6xl mx-auto p-6">
+
+    <h2 class="text-lg font-bold mb-5" style="color:var(--w-muted); border-bottom:1px solid var(--w-border); padding-bottom:8px;">
+      카드 편집 모달
+    </h2>
+
+    <!-- Modal overlay -->
+    <div class="rounded-lg" style="position:relative; min-height:550px; background:rgba(0,0,0,0.1); display:flex; align-items:center; justify-content:center;">
+      <div class="border rounded-lg w-full" style="border-color:var(--w-border); background:white; max-width:520px;">
+        <!-- Header -->
+        <div class="flex items-center justify-between px-5 py-3" style="border-bottom:1px solid var(--w-border);">
+          <span class="text-sm font-bold">Edit Card</span>
+          <div class="flex items-center gap-2">
+            <button class="border rounded p-1.5 text-sm" style="border-color:var(--w-border); background:var(--w-fill)" disabled><i data-lucide="trash-2" style="width:14px;height:14px;"></i></button>
+            <span style="cursor:pointer; color:var(--w-muted)"><i data-lucide="x" style="width:16px;height:16px;"></i></span>
+          </div>
+        </div>
+        <!-- Body -->
+        <div class="p-5 flex flex-col gap-4">
+          <!-- Title -->
+          <div>
+            <label class="text-xs" style="color:var(--w-muted)">Title</label>
+            <input class="w-full border rounded px-3 py-1.5 text-sm mt-1" style="border-color:var(--w-border); background:var(--w-fill)" value="우유 사기" disabled>
+          </div>
+          <!-- Description -->
+          <div>
+            <label class="text-xs" style="color:var(--w-muted)">Description</label>
+            <textarea class="w-full border rounded px-3 py-2 text-sm mt-1" rows="2" style="border-color:var(--w-border); background:var(--w-fill); resize:none;" placeholder="Add a description..." disabled></textarea>
+          </div>
+          <!-- Priority & Due Date row -->
+          <div class="flex gap-3">
+            <div class="flex-1">
+              <label class="text-xs" style="color:var(--w-muted)">Priority</label>
+              <div class="border rounded px-3 py-1.5 text-sm flex items-center justify-between mt-1" style="border-color:var(--w-border); background:var(--w-fill)">
+                <span>High</span>
+                <span style="color:var(--w-muted)">&#x25BE;</span>
+              </div>
+            </div>
+            <div class="flex-1">
+              <label class="text-xs" style="color:var(--w-muted)">Due Date</label>
+              <input class="w-full border rounded px-3 py-1.5 text-sm mt-1" type="text" style="border-color:var(--w-border); background:var(--w-fill)" value="2026-03-20" disabled>
+            </div>
+          </div>
+          <!-- Tags -->
+          <div>
+            <label class="text-xs" style="color:var(--w-muted)">Tags</label>
+            <div class="flex items-center gap-2 mt-1 flex-wrap">
+              <span class="border rounded-full px-2 text-xs" style="border-color:var(--w-border); background:var(--w-fill)">장보기 ✕</span>
+              <input class="border rounded px-2 py-0.5 text-xs" style="border-color:var(--w-border); background:var(--w-fill); color:var(--w-muted); width:80px;" placeholder="Add tag..." disabled>
+            </div>
+          </div>
+          <!-- Subtasks -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <label class="text-xs" style="color:var(--w-muted)">Subtasks</label>
+              <div class="flex items-center gap-2">
+                <div class="flex-1 rounded-full overflow-hidden" style="height:4px; background:var(--w-fill); width:60px;">
+                  <div class="rounded-full" style="height:100%; width:50%; background:var(--w-border)"></div>
+                </div>
+                <span class="text-xs" style="color:var(--w-muted)">1/2</span>
+              </div>
+            </div>
+            <div class="flex flex-col gap-1">
+              <div class="flex items-center gap-2">
+                <input type="checkbox" checked disabled>
+                <span class="text-sm line-through" style="color:var(--w-muted)">계란도 사기</span>
+                <button class="ml-auto border rounded p-0.5" style="border-color:var(--w-border); background:var(--w-fill)" disabled><i data-lucide="x" style="width:12px;height:12px;"></i></button>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="checkbox" disabled>
+                <span class="text-sm">빵 사기</span>
+                <button class="ml-auto border rounded p-0.5" style="border-color:var(--w-border); background:var(--w-fill)" disabled><i data-lucide="x" style="width:12px;height:12px;"></i></button>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 mt-2">
+              <input class="flex-1 border rounded px-2 py-1 text-sm" style="border-color:var(--w-border); background:var(--w-fill); color:var(--w-muted)" placeholder="Add subtask..." disabled>
+              <button class="border rounded p-1.5 text-sm" style="border-color:var(--w-border); background:var(--w-fill)" disabled><i data-lucide="plus" style="width:14px;height:14px;"></i></button>
+            </div>
+          </div>
+        </div>
+        <!-- Footer -->
+        <div class="flex justify-end gap-2 px-5 py-3" style="border-top:1px solid var(--w-border);">
+          <button class="border rounded px-3 py-1 text-sm" style="border-color:var(--w-border); background:var(--w-fill)" disabled>Cancel</button>
+          <button class="border rounded px-3 py-1 text-sm font-bold" style="border-color:var(--w-text); background:var(--w-fill)" disabled>Save</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen-notes mt-6">
+      <details open>
+        <summary>Notes</summary>
+        <p>KANBAN-003, 004, 005, 006, 009, 010: 카드 클릭 시 편집 모달이 열린다.</p>
+        <ul>
+          <li>KANBAN-003: 모달에 제목, 설명, 우선순위, 마감일, 태그, 서브태스크 필드가 모두 표시됨</li>
+          <li>KANBAN-004: 필드 수정 후 Save 클릭 → 변경 반영 (제목 변경, 우선순위 변경 등)</li>
+          <li>KANBAN-005: Cancel 또는 ✕ 클릭 → 변경 무시, 원본 유지</li>
+          <li>KANBAN-006: 휴지통 아이콘 클릭 → 카드 삭제</li>
+          <li>KANBAN-009: 서브태스크 입력 + Plus 버튼으로 추가. 체크박스로 완료 토글. 진행률 표시</li>
+          <li>KANBAN-010: 서브태스크 우측 ✕ 버튼으로 삭제</li>
+          <li>반응형: 모바일에서 모달이 전체 화면으로 확대</li>
+        </ul>
+      </details>
+    </div>
+
+  </div>
+</div>
+
+<!-- Screen 4: 드래그&드롭 — KANBAN-007, 008 -->
+<div id="screen-4" class="screen">
+  <div class="screen-content @container max-w-6xl mx-auto p-6">
+
+    <h2 class="text-lg font-bold mb-5" style="color:var(--w-muted); border-bottom:1px solid var(--w-border); padding-bottom:8px;">
+      드래그&드롭
+    </h2>
+
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-4">
+      <h1 class="text-base font-bold">Kanban Board</h1>
+      <div class="flex items-center gap-2">
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="sun" style="width:14px;height:14px;color:var(--w-muted);"></i>
+          <div class="border rounded-full" style="width:32px;height:16px;background:var(--w-fill);border-color:var(--w-border);position:relative;">
+            <div style="width:12px;height:12px;border-radius:50%;background:white;border:1px solid var(--w-border);position:absolute;top:1px;left:2px;"></div>
+          </div>
+          <i data-lucide="moon" style="width:14px;height:14px;color:var(--w-muted);"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kanban Columns — drag in progress -->
+    <div class="grid grid-cols-1 @md:grid-cols-3 gap-4">
+      <!-- To Do — card being dragged away -->
+      <div class="border rounded-lg overflow-hidden" style="border-color:var(--w-border); background:white;">
+        <div class="px-4 py-3 flex items-center justify-between" style="border-bottom:1px solid var(--w-border); background:var(--w-fill);">
+          <span class="text-sm font-bold">To Do</span>
+          <span class="text-xs" style="color:var(--w-muted)">2</span>
+        </div>
+        <div class="p-3 flex flex-col gap-2">
+          <!-- Placeholder for dragged card -->
+          <div class="border-2 border-dashed rounded-lg p-3" style="border-color:var(--w-border); background:var(--w-fill); min-height:60px; opacity:0.5;">
+            <span class="text-sm" style="color:var(--w-muted)">우유 사기</span>
+          </div>
+          <!-- Remaining card -->
+          <div class="border rounded-lg p-3" style="border-color:var(--w-border); background:white;">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-sm font-bold">회의록 작성</span>
+              <span class="border rounded-full px-2 text-xs" style="border-color:var(--w-border); background:var(--w-fill)">Medium</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- In Progress — drop target highlighted -->
+      <div class="border-2 rounded-lg overflow-hidden" style="border-color:var(--w-text); background:white;">
+        <div class="px-4 py-3 flex items-center justify-between" style="border-bottom:1px solid var(--w-border); background:var(--w-fill);">
+          <span class="text-sm font-bold">In Progress</span>
+          <span class="text-xs" style="color:var(--w-muted)">0</span>
+        </div>
+        <div class="p-3 flex flex-col gap-2">
+          <!-- Drop indicator -->
+          <div class="border-2 border-dashed rounded-lg p-3 flex items-center justify-center" style="border-color:var(--w-text); background:var(--w-fill); min-height:60px;">
+            <span class="text-xs" style="color:var(--w-muted)">Drop here</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Floating dragged card -->
+      <div style="position:absolute; top:50%; left:45%; transform:rotate(3deg); z-index:20; opacity:0.9;">
+        <div class="border rounded-lg p-3" style="border-color:var(--w-text); background:white; box-shadow:0 4px 16px rgba(0,0,0,0.15); width:200px;">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-sm font-bold">우유 사기</span>
+            <span class="border rounded-full px-2 text-xs" style="border-color:var(--w-border); background:var(--w-fill)">High</span>
+          </div>
+          <div class="flex items-center gap-1">
+            <span class="border rounded-full px-2 text-xs" style="border-color:var(--w-border); background:var(--w-fill)">장보기</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Done -->
+      <div class="border rounded-lg overflow-hidden" style="border-color:var(--w-border); background:white;">
+        <div class="px-4 py-3 flex items-center justify-between" style="border-bottom:1px solid var(--w-border); background:var(--w-fill);">
+          <span class="text-sm font-bold">Done</span>
+          <span class="text-xs" style="color:var(--w-muted)">1</span>
+        </div>
+        <div class="p-3 flex flex-col gap-2">
+          <div class="border rounded-lg p-3" style="border-color:var(--w-border); background:white;">
+            <span class="text-sm font-bold" style="text-decoration:line-through; color:var(--w-muted);">이메일 정리</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen-notes mt-6">
+      <details open>
+        <summary>Notes</summary>
+        <p>KANBAN-007, 008: 카드를 드래그하여 다른 칼럼으로 이동하는 중간 상태.</p>
+        <ul>
+          <li>드래그 중인 카드: 살짝 회전(3deg) + 그림자 + 반투명으로 플로팅 표시</li>
+          <li>원래 위치: 점선 플레이스홀더로 카드가 있던 자리를 표시</li>
+          <li>드롭 대상 칼럼: 굵은 테두리 + "Drop here" 영역으로 강조</li>
+          <li>KANBAN-007: To Do → In Progress 이동</li>
+          <li>KANBAN-008: In Progress → Done 이동 (동일 패턴)</li>
+        </ul>
+      </details>
+    </div>
+
+  </div>
+</div>
+
+<!-- Screen 5: 검색·필터 — KANBAN-011, 012, 013, 014 -->
+<div id="screen-5" class="screen">
+  <div class="screen-content @container max-w-6xl mx-auto p-6">
+
+    <h2 class="text-lg font-bold mb-5" style="color:var(--w-muted); border-bottom:1px solid var(--w-border); padding-bottom:8px;">
+      검색·필터 적용
+    </h2>
+
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-4">
+      <h1 class="text-base font-bold">Kanban Board</h1>
+      <div class="flex items-center gap-2">
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="sun" style="width:14px;height:14px;color:var(--w-muted);"></i>
+          <div class="border rounded-full" style="width:32px;height:16px;background:var(--w-fill);border-color:var(--w-border);position:relative;">
+            <div style="width:12px;height:12px;border-radius:50%;background:white;border:1px solid var(--w-border);position:absolute;top:1px;left:2px;"></div>
+          </div>
+          <i data-lucide="moon" style="width:14px;height:14px;color:var(--w-muted);"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search with value + active filter -->
+    <div class="flex flex-col @md:flex-row gap-2 mb-2">
+      <div class="flex items-center border rounded px-3 py-1.5 gap-2 flex-1" style="border-color:var(--w-text); background:var(--w-fill);">
+        <i data-lucide="search" style="width:16px;height:16px;flex-shrink:0;"></i>
+        <input class="w-full text-sm border-0 outline-none" style="background:transparent;" value="우유" disabled>
+        <span style="color:var(--w-muted); cursor:pointer;"><i data-lucide="x" style="width:14px;height:14px;"></i></span>
+      </div>
+      <div class="flex gap-2">
+        <div class="border rounded px-3 py-1.5 text-sm flex items-center justify-between gap-2" style="border-color:var(--w-text); background:var(--w-fill); min-width:120px;">
+          <span class="font-bold">High</span>
+          <span style="color:var(--w-muted)">&#x25BE;</span>
+        </div>
+        <div class="border rounded px-3 py-1.5 text-sm flex items-center justify-between gap-2" style="border-color:var(--w-border); background:var(--w-fill); min-width:120px;">
+          <span style="color:var(--w-muted)">Tags</span>
+          <span style="color:var(--w-muted)">&#x25BE;</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active filter chips -->
+    <div class="flex items-center gap-2 mb-4">
+      <span class="text-xs" style="color:var(--w-muted)">Active:</span>
+      <span class="border rounded-full px-2 text-xs" style="border-color:var(--w-border); background:var(--w-fill)">Search: "우유" ✕</span>
+      <span class="border rounded-full px-2 text-xs" style="border-color:var(--w-border); background:var(--w-fill)">Priority: High ✕</span>
+      <button class="text-xs" style="color:var(--w-muted);" disabled>Clear all</button>
+    </div>
+
+    <!-- Filtered Kanban Columns -->
+    <div class="grid grid-cols-1 @md:grid-cols-3 gap-4">
+      <!-- To Do — 1 matching card -->
+      <div class="border rounded-lg overflow-hidden" style="border-color:var(--w-border); background:white;">
+        <div class="px-4 py-3 flex items-center justify-between" style="border-bottom:1px solid var(--w-border); background:var(--w-fill);">
+          <span class="text-sm font-bold">To Do</span>
+          <span class="text-xs" style="color:var(--w-muted)">1</span>
+        </div>
+        <div class="p-3 flex flex-col gap-2">
+          <div class="border rounded-lg p-3" style="border-color:var(--w-border); background:white;">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-sm font-bold">우유 사기</span>
+              <span class="border rounded-full px-2 text-xs" style="border-color:var(--w-border); background:var(--w-fill)">High</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <span class="border rounded-full px-2 text-xs" style="border-color:var(--w-border); background:var(--w-fill)">장보기</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- In Progress — no match -->
+      <div class="border rounded-lg overflow-hidden" style="border-color:var(--w-border); background:white;">
+        <div class="px-4 py-3 flex items-center justify-between" style="border-bottom:1px solid var(--w-border); background:var(--w-fill);">
+          <span class="text-sm font-bold">In Progress</span>
+          <span class="text-xs" style="color:var(--w-muted)">0</span>
+        </div>
+        <div class="p-3">
+          <p class="text-xs text-center py-4" style="color:var(--w-muted)">No matching cards</p>
+        </div>
+      </div>
+
+      <!-- Done — no match -->
+      <div class="border rounded-lg overflow-hidden" style="border-color:var(--w-border); background:white;">
+        <div class="px-4 py-3 flex items-center justify-between" style="border-bottom:1px solid var(--w-border); background:var(--w-fill);">
+          <span class="text-sm font-bold">Done</span>
+          <span class="text-xs" style="color:var(--w-muted)">0</span>
+        </div>
+        <div class="p-3">
+          <p class="text-xs text-center py-4" style="color:var(--w-muted)">No matching cards</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen-notes mt-6">
+      <details open>
+        <summary>Notes</summary>
+        <p>KANBAN-011, 012, 013, 014: 검색어 및 필터가 적용된 상태.</p>
+        <ul>
+          <li>KANBAN-011: 검색창에 "우유" 입력 → "우유 사기"만 표시. ✕로 검색어 삭제 시 전체 표시</li>
+          <li>KANBAN-012: Priority 드롭다운에서 "High" 선택 → High 카드만 표시</li>
+          <li>KANBAN-013: Tags 드롭다운에서 태그 선택 → 해당 태그 카드만 표시</li>
+          <li>KANBAN-014: Active 필터 칩의 ✕ 또는 "Clear all" 클릭 → 필터 해제, 전체 카드 표시</li>
+          <li>검색·필터 활성 시 입력/드롭다운 테두리가 굵어짐 (border-color: --w-text)</li>
+          <li>매칭 카드 없는 칼럼에 "No matching cards" 표시</li>
+        </ul>
+      </details>
+    </div>
+
+  </div>
+</div>
+
+<!-- Screen 6: 다크모드 — KANBAN-015 -->
+<div id="screen-6" class="screen">
+  <div class="screen-content @container max-w-6xl mx-auto p-6">
+
+    <h2 class="text-lg font-bold mb-5" style="color:var(--w-muted); border-bottom:1px solid var(--w-border); padding-bottom:8px;">
+      다크모드
+    </h2>
+
+    <!-- Dark mode simulation -->
+    <div class="rounded-lg p-6" style="background:#1a1a2e;">
+
+      <!-- Header -->
+      <div class="flex items-center justify-between mb-4">
+        <h1 class="text-base font-bold" style="color:#e0e0e0;">Kanban Board</h1>
+        <div class="flex items-center gap-2">
+          <div class="flex items-center gap-1.5">
+            <i data-lucide="sun" style="width:14px;height:14px;color:#666;"></i>
+            <div class="border rounded-full" style="width:32px;height:16px;background:#444;border-color:#555;position:relative;">
+              <div style="width:12px;height:12px;border-radius:50%;background:#e0e0e0;border:1px solid #555;position:absolute;top:1px;right:2px;"></div>
+            </div>
+            <i data-lucide="moon" style="width:14px;height:14px;color:#e0e0e0;"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search bar dark -->
+      <div class="flex flex-col @md:flex-row gap-2 mb-4">
+        <div class="flex items-center border rounded px-3 py-1.5 gap-2 flex-1" style="border-color:#444; background:#2a2a3e;">
+          <i data-lucide="search" style="width:16px;height:16px;flex-shrink:0;color:#666;"></i>
+          <input class="w-full text-sm border-0 outline-none" style="background:transparent; color:#666" placeholder="Search cards..." disabled>
+        </div>
+      </div>
+
+      <!-- Dark Kanban Columns -->
+      <div class="grid grid-cols-1 @md:grid-cols-3 gap-4">
+        <!-- To Do -->
+        <div class="border rounded-lg overflow-hidden" style="border-color:#444; background:#22223a;">
+          <div class="px-4 py-3 flex items-center justify-between" style="border-bottom:1px solid #444; background:#2a2a3e;">
+            <span class="text-sm font-bold" style="color:#e0e0e0;">To Do</span>
+            <span class="text-xs" style="color:#666;">2</span>
+          </div>
+          <div class="p-3 flex flex-col gap-2">
+            <div class="border rounded-lg p-3" style="border-color:#444; background:#2a2a3e;">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-sm font-bold" style="color:#e0e0e0;">우유 사기</span>
+                <span class="border rounded-full px-2 text-xs" style="border-color:#444; background:#333; color:#e0e0e0;">High</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <span class="border rounded-full px-2 text-xs" style="border-color:#444; background:#333; color:#999;">장보기</span>
+              </div>
+            </div>
+            <div class="border rounded-lg p-3" style="border-color:#444; background:#2a2a3e;">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-sm font-bold" style="color:#e0e0e0;">회의록 작성</span>
+                <span class="border rounded-full px-2 text-xs" style="border-color:#444; background:#333; color:#e0e0e0;">Medium</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- In Progress -->
+        <div class="border rounded-lg overflow-hidden" style="border-color:#444; background:#22223a;">
+          <div class="px-4 py-3 flex items-center justify-between" style="border-bottom:1px solid #444; background:#2a2a3e;">
+            <span class="text-sm font-bold" style="color:#e0e0e0;">In Progress</span>
+            <span class="text-xs" style="color:#666;">1</span>
+          </div>
+          <div class="p-3 flex flex-col gap-2">
+            <div class="border rounded-lg p-3" style="border-color:#444; background:#2a2a3e;">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-sm font-bold" style="color:#e0e0e0;">프로젝트 기획서</span>
+                <span class="border rounded-full px-2 text-xs" style="border-color:#444; background:#333; color:#e0e0e0;">High</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Done -->
+        <div class="border rounded-lg overflow-hidden" style="border-color:#444; background:#22223a;">
+          <div class="px-4 py-3 flex items-center justify-between" style="border-bottom:1px solid #444; background:#2a2a3e;">
+            <span class="text-sm font-bold" style="color:#e0e0e0;">Done</span>
+            <span class="text-xs" style="color:#666;">1</span>
+          </div>
+          <div class="p-3 flex flex-col gap-2">
+            <div class="border rounded-lg p-3" style="border-color:#444; background:#2a2a3e;">
+              <span class="text-sm" style="text-decoration:line-through; color:#666;">이메일 정리</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen-notes mt-6">
+      <details open>
+        <summary>Notes</summary>
+        <p>KANBAN-015: 다크모드 토글이 ON인 상태. 앱 전체가 어두운 테마로 전환된다.</p>
+        <ul>
+          <li>토글: moon 아이콘 쪽으로 knob 이동 (ON 상태)</li>
+          <li>배경: 어두운 색상 (#1a1a2e), 카드/칼럼: 약간 밝은 어둡 (#22223a, #2a2a3e)</li>
+          <li>텍스트: 밝은 색상 (#e0e0e0), 보조 텍스트: 중간 회색 (#666)</li>
+          <li>다시 토글 클릭 → 라이트 모드(기본 화면)로 복귀</li>
+          <li>구현 시 CSS variables 또는 class 전환으로 처리</li>
+        </ul>
+      </details>
+    </div>
+
+  </div>
+</div>
+
+<!-- Screen 7: JSON 관리 — KANBAN-018, 019, 020 -->
+<div id="screen-7" class="screen">
+  <div class="screen-content @container max-w-6xl mx-auto p-6">
+
+    <h2 class="text-lg font-bold mb-5" style="color:var(--w-muted); border-bottom:1px solid var(--w-border); padding-bottom:8px;">
+      JSON 가져오기/내보내기
+    </h2>
+
+    <!-- Header with Export/Import highlighted -->
+    <div class="flex items-center justify-between mb-4">
+      <h1 class="text-base font-bold">Kanban Board</h1>
+      <div class="flex items-center gap-2">
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="sun" style="width:14px;height:14px;color:var(--w-muted);"></i>
+          <div class="border rounded-full" style="width:32px;height:16px;background:var(--w-fill);border-color:var(--w-border);position:relative;">
+            <div style="width:12px;height:12px;border-radius:50%;background:white;border:1px solid var(--w-border);position:absolute;top:1px;left:2px;"></div>
+          </div>
+          <i data-lucide="moon" style="width:14px;height:14px;color:var(--w-muted);"></i>
+        </div>
+        <div style="border-left:1px solid var(--w-border); height:24px;"></div>
+        <button class="border rounded px-3 py-1 text-sm font-bold" style="border-color:var(--w-text); background:var(--w-fill)" disabled>
+          <span class="flex items-center gap-1"><i data-lucide="download" style="width:14px;height:14px;"></i> Export</span>
+        </button>
+        <button class="border rounded px-3 py-1 text-sm font-bold" style="border-color:var(--w-text); background:var(--w-fill)" disabled>
+          <span class="flex items-center gap-1"><i data-lucide="upload" style="width:14px;height:14px;"></i> Import</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Import file dialog -->
+    <div class="border rounded-lg p-4 mb-4" style="border-color:var(--w-border); background:white;">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-sm font-bold">Import JSON</span>
+        <span style="color:var(--w-muted)"><i data-lucide="x" style="width:14px;height:14px;"></i></span>
+      </div>
+      <div class="border-2 border-dashed rounded-lg p-6 flex flex-col items-center gap-2" style="border-color:var(--w-border);">
+        <i data-lucide="upload" style="width:32px;height:32px;color:var(--w-muted);"></i>
+        <p class="text-sm" style="color:var(--w-muted)">Drop JSON file here or click to select</p>
+        <p class="text-xs" style="color:var(--w-muted)">.json files only</p>
+      </div>
+      <div class="border rounded-lg px-4 py-3 flex items-start gap-2 text-sm mt-3" style="border-color:var(--w-border); background:var(--w-fill);">
+        <i data-lucide="alert-triangle" style="width:16px;height:16px;flex-shrink:0;"></i>
+        <div>
+          <p class="font-bold">Warning</p>
+          <p class="text-xs mt-0.5" style="color:var(--w-muted)">Importing will replace all existing data.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error toast (inline representation) -->
+    <div class="mb-4">
+      <p class="text-xs mb-1" style="color:var(--w-muted)">Error state (toast, bottom-right):</p>
+      <div class="border rounded-lg px-4 py-3 text-sm" style="border-color:var(--w-border); background:white; box-shadow:0 2px 8px rgba(0,0,0,0.08); max-width:360px;">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <i data-lucide="alert-triangle" style="width:14px;height:14px;"></i>
+            <span>Invalid JSON format. Data not imported.</span>
+          </div>
+          <span style="color:var(--w-muted)"><i data-lucide="x" style="width:14px;height:14px;"></i></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Partial board behind -->
+    <div class="grid grid-cols-1 @md:grid-cols-3 gap-4" style="opacity:0.4;">
+      <div class="border rounded-lg overflow-hidden" style="border-color:var(--w-border); background:white;">
+        <div class="px-4 py-3" style="border-bottom:1px solid var(--w-border); background:var(--w-fill);">
+          <span class="text-sm font-bold">To Do</span>
+        </div>
+        <div class="p-3">
+          <div class="border rounded-lg p-3" style="border-color:var(--w-border);">
+            <span class="text-sm">우유 사기</span>
+          </div>
+        </div>
+      </div>
+      <div class="border rounded-lg overflow-hidden" style="border-color:var(--w-border); background:white;">
+        <div class="px-4 py-3" style="border-bottom:1px solid var(--w-border); background:var(--w-fill);">
+          <span class="text-sm font-bold">In Progress</span>
+        </div>
+        <div class="p-3">
+          <div class="border rounded-lg p-3" style="border-color:var(--w-border);">
+            <span class="text-sm">프로젝트 기획서</span>
+          </div>
+        </div>
+      </div>
+      <div class="border rounded-lg overflow-hidden" style="border-color:var(--w-border); background:white;">
+        <div class="px-4 py-3" style="border-bottom:1px solid var(--w-border); background:var(--w-fill);">
+          <span class="text-sm font-bold">Done</span>
+        </div>
+        <div class="p-3">
+          <div class="border rounded-lg p-3" style="border-color:var(--w-border);">
+            <span class="text-sm" style="text-decoration:line-through; color:var(--w-muted);">이메일 정리</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen-notes mt-6">
+      <details open>
+        <summary>Notes</summary>
+        <p>KANBAN-018, 019, 020: JSON 내보내기/가져오기 기능.</p>
+        <ul>
+          <li>KANBAN-018: Export 버튼 클릭 → 보드 전체 데이터를 JSON 파일로 다운로드</li>
+          <li>KANBAN-019: Import 버튼 클릭 → 파일 선택 영역 표시. 유효한 JSON 업로드 시 기존 데이터 전체 교체</li>
+          <li>KANBAN-020: 잘못된 형식의 JSON 업로드 시 에러 토스트 표시, 기존 데이터 유지</li>
+          <li>Import 영역에 경고 문구: "Importing will replace all existing data."</li>
+          <li>에러 토스트: 화면 하단 우측에 일시적 표시 (여기서는 인라인으로 표현)</li>
         </ul>
       </details>
     </div>
